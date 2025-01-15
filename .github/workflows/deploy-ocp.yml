@@ -2,9 +2,7 @@ name: Deploy Petstore API
 
 on:
   push:
-    branches:
-      - main
-
+    branches: ["master"]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -17,8 +15,6 @@ jobs:
         env:
           OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
           OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
-
-        # Install OCP CLI
         run: |
           curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
           tar -xvzf openshift-client-linux.tar.gz
