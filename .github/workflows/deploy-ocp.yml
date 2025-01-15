@@ -33,6 +33,7 @@ jobs:
           chmod +x oc
           sudo mv oc /usr/local/bin/
           oc login $OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
+          oc project github-test-1
 
       - name: Build and push image
         run: |
