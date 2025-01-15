@@ -28,24 +28,12 @@ jobs:
           oc login $OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
           oc project github-test-1
 
-      - name: Set image tag
+      - name: Build and push image
         run: |
-          SC_RELEASE_TAG="${{ github.event.inputs.tag }}"
-          echo "Deploying tag: $SC_RELEASE_TAG"
+          oc new-build --binary --name=petstore-api -l app=petstore-api --strategy=docker
+          oc start-build petstore-api --from-dir=. --follow
 
-          DEPLOY_IMAGE="swaggerapi/swagger-petstore3:$SC_RELEASE_TAG"
-          
-          # Update the image in the DeploymentConfig (or Deployment)
-          oc set image deployment/my-api my-api=$DEPLOY_IMAGE --record
-
-      - name: Wait for deployment to be ready
+      - name: Deploy to OpenShift
         run: |
-          oc rollout status deployment/my-api --timeout=5m
-
-      - name: Expose API if not already exposed
-        run: |
-          oc expose deployment my-api --name=my-api --port=8080 --target-port=8080 --type=LoadBalancer
-
-      - name: Get URL of deployed API
-        run: |
-          oc get route my-api
+          oc apply -f deployment-ocp.yaml
+          oc expose deployment petstore-api
