@@ -36,7 +36,6 @@ jobs:
 
       - name: Build and push image
         run: |
-          oc new-build --binary --name=petstore-api -l app=petstore-api --strategy=docker
           oc start-build petstore-api --from-dir=. --follow
 
       - name: Deploy to OpenShift
