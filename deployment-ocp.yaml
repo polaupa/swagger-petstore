@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petstore-api
+  labels:
+    app: petstore-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petstore-api
+  template:
+    metadata:
+      labels:
+        app: petstore-api
+    spec:
+      containers:
+      - name: petstore-api
+        image: image-registry.openshift-image-registry.svc:5000/github-test-1/petstore-api:latest
+        ports:
+        - containerPort: 8080
